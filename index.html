@@ -4,33 +4,79 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>OBLIQ ASSOCIATES — Architecture & Workplace</title>
-<meta name="description" content="Architecture for office, commercial infrastructure & interiors. Human‑centred design, strategy to delivery. Bengaluru, India."/>
-<link rel="icon" type="image/png" href="https://res.cloudinary.com/dvpmvben2/image/upload/v1756871062/Favicon_jbspde.png">
+<meta name="description" content="Architecture for office, commercial infrastructure & interiors. Human-centred design, strategy to delivery. Bengaluru, India."/>
 <style>
+  /* =========================
+     DESIGN TOKENS — Four-tone palette
+     ========================= */
   :root{
-    --c0:#F8FAFC; --c1:#D9EAFD; --c2:#BCCCDC; --c3:#9AA6B2;
-    --paper:var(--c0); --ink:#1a202c; --muted:#64748b; --line:#e2e8f0;
+    --c0:#F8FAFC; /* paper */
+    --c1:#D9EAFD; /* sky */
+    --c2:#BCCCDC; /* steel */
+    --c3:#9AA6B2; /* slate */
+
+    --paper:var(--c0);
+    --ink:#1a202c;
+    --muted:var(--c3);
+    --line:var(--c2);
+    --accent:var(--c1);
+    --accent-2:var(--c2);
+
     --glass:rgba(255,255,255,.75);
     --shadow-1:0 10px 30px rgba(0,0,0,.06);
     --shadow-2:0 18px 55px rgba(0,0,0,.12);
-    --radius:18px;
+    --radius:18px; --radius-sm:12px;
+
     --h1:clamp(2.4rem,1.4rem + 3.4vw,4.4rem);
     --h2:clamp(1.6rem,1.1rem + 2vw,2.6rem);
+    --h3:clamp(1.15rem,1rem + .8vw,1.4rem);
     --lead:clamp(1.05rem,.95rem + .6vw,1.25rem);
+    --body:1rem;
   }
-  *{box-sizing:border-box}
-  body{margin:0; font:400 1rem/1.6 ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,Arial; color:var(--ink); background:var(--paper)}
-  .container{width:min(1200px,92%); margin-inline:auto}
-  a{color:inherit; text-decoration:none}
 
-  /* Header */
-  .site-header{position:sticky; top:0; z-index:60; backdrop-filter:saturate(140%) blur(12px); background:var(--glass); border-bottom:1px solid var(--line)}
+  *{box-sizing:border-box}
+  body{
+    margin:0; font:400 var(--body)/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+    color:var(--ink); background:var(--paper);
+    transition:background-color .4s ease;
+  }
+  img{max-width:100%; display:block}
+  a{color:inherit; text-decoration:none}
+  .container{width:min(1200px,92%); margin-inline:auto}
+
+  /* ========================= Background Video ========================= */
+  .video-bg{
+    position:fixed; inset:0; z-index:-1; pointer-events:none;
+    transition:opacity .5s ease;
+  }
+  .video-bg video{
+    width:100%; height:100%; object-fit:cover; display:block; filter:saturate(105%);
+  }
+  /* optional soft gradient for legibility on top of video */
+  .video-tint{
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(248,250,252,.7) 0%, rgba(248,250,252,.35) 28%, rgba(248,250,252,.10) 45%, rgba(248,250,252,.12) 60%, rgba(248,250,252,.18) 100%);
+  }
+  /* when we pass the cutoff, fade the video out */
+  body.video-off .video-bg{ opacity:0; }
+
+  @media (prefers-reduced-motion: reduce){
+    .video-bg{ display:none; }
+  }
+
+  /* ========================= Header ========================= */
+  .site-header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(12px); background:var(--glass); border-bottom:1px solid var(--line)}
   .nav{display:flex; align-items:center; justify-content:space-between; gap:20px; padding:14px 0}
-  .brand{display:flex; align-items:center; gap:12px; font-weight:800}
-  .brand img{height:36px; width:auto; border-radius:8px}
+  .brand{display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.02em}
+  .logo{width:36px; height:36px; border-radius:10px; background:
+    radial-gradient(60% 60% at 30% 30%, var(--c3), transparent 60%),
+    radial-gradient(70% 70% at 70% 70%, var(--c2), transparent 50%),
+    linear-gradient(135deg, var(--c1), #cfe3f8);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.5), var(--shadow-1);
+  }
   .nav-links{display:flex; gap:22px; align-items:center}
-  .nav-links a{padding:8px 10px; border-radius:10px; color:#475569}
-  .nav-links a:hover,.nav-links a.active{background:rgba(217,234,253,.55)}
+  .nav-links a{padding:8px 10px; border-radius:10px; color:var(--muted)}
+  .nav-links a:hover,.nav-links a.active{background:rgba(217,234,253,.45); color:var(--ink)}
   .menu-toggle{display:none; border:0; background:transparent; padding:8px}
   .menu-toggle span{display:block; width:24px; height:2px; background:#111; margin:5px 0; border-radius:2px}
   @media (max-width:860px){
@@ -39,78 +85,286 @@
     .nav-links.open{display:flex}
   }
 
-  /* Sticky video section */
-  .video-section{position:relative}
-  .video-sticky{position:sticky; top:0; height:100vh; z-index:0; border-bottom:1px solid var(--line); background:#000}
-  .video-sticky video{width:100%; height:100%; object-fit:cover; display:block}
-  .video-spacer{height:20vh}
-
-  /* Content below */
-  .hero{padding:clamp(60px,8vw,120px) 0; background:
-    radial-gradient(1000px 500px at 100% 0, rgba(217,234,253,.42), transparent 60%),
-    radial-gradient(800px 520px at 0 0, rgba(188,204,220,.30), transparent 55%)}
-  h1{font-size:var(--h1); margin:0 0 10px}
-  .lead{color:var(--muted); font-size:var(--lead); margin:0 0 20px}
+  /* ========================= Hero ========================= */
+  .hero{
+    position:relative; overflow:hidden; padding:clamp(80px,10vw,160px) 0;
+    /* keep some of your soft background for graceful video fallback */
+    background:
+      radial-gradient(1100px 600px at 100% 0, rgba(217,234,253,.42), transparent 60%),
+      radial-gradient(900px 600px at 0 0, rgba(188,204,220,.30), transparent 55%);
+  }
+  .hero::after{
+    /* subtle top-to-bottom fade for legibility over video */
+    content:""; position:absolute; inset:0 0 0 0; pointer-events:none;
+    background:linear-gradient(180deg, rgba(248,250,252,.85) 0%, rgba(248,250,252,.5) 24%, rgba(248,250,252,.2) 55%, rgba(248,250,252,.12) 100%);
+  }
+  .hero-grid{position:relative; z-index:1; display:grid; grid-template-columns: 1.05fr .95fr; gap:clamp(24px,4vw,64px); align-items:center}
+  .hero h1{font-size:var(--h1); line-height:1.1; margin:0 0 14px}
+  .lead{font-size:var(--lead); color:var(--muted); margin:0 0 24px}
+  .cta-row{display:flex; flex-wrap:wrap; gap:12px}
   .btn{display:inline-flex; align-items:center; gap:10px; padding:12px 18px; border-radius:12px; border:1px solid var(--line); background:#fff; font-weight:700; cursor:pointer; box-shadow:var(--shadow-1)}
-  .btn.primary{background:linear-gradient(90deg, #9AA6B2, #BCCCDC); color:#0f172a; border-color:transparent}
+  .btn.primary{background:linear-gradient(90deg, var(--c3), var(--c2)); color:#0f172a; border-color:transparent}
+  .statbox{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:18px}
+  .stat{border:1px solid var(--line); border-radius:14px; padding:14px; background:linear-gradient(180deg,#fff,#f4f8ff)}
+  .stat .n{font:800 1.6rem/1.2 ui-sans-serif}
+  .stat .t{color:var(--muted)}
+  .hero-visual{border-radius:var(--radius); border:1px solid var(--line); background:#fff; box-shadow:var(--shadow-2); padding:18px}
+  .hero-visual .frame{aspect-ratio:16/9; border-radius:14px; background:linear-gradient(135deg,var(--c1),var(--c2)); opacity:.22}
+  @media (max-width:980px){ .hero-grid{grid-template-columns:1fr} }
+
+  /* ========================= Sections ========================= */
+  .section{padding:clamp(56px,8vw,96px) 0}
+  .eyebrow{display:inline-block; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:800; font-size:.76rem; margin-bottom:8px}
+  h2{font-size:var(--h2); margin:.2em 0 .6em}
   .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
-  .card{background:#fff; border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow:var(--shadow-1)}
-  @media (max-width:900px){ .grid3{grid-template-columns:1fr} }
+  .card{background:#fff; border:1px solid var(--line); border-radius:16px; overflow:hidden; box-shadow:var(--shadow-1); display:flex; flex-direction:column}
+  .thumb{aspect-ratio:16/10; background:linear-gradient(90deg,var(--c1),var(--c2)); opacity:.28}
+  .meta{padding:14px}
+  .title{font-weight:800}
+  .sub{color:var(--muted)}
+  .card:hover{transform:translateY(-2px); box-shadow:var(--shadow-2); transition:transform .25s ease, box-shadow .25s ease}
+  @media (max-width:1024px){ .grid3{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:600px){ .grid3{grid-template-columns:1fr} }
+
+  /* ========================= Services Strip ========================= */
+  .strip{border:1px solid var(--line); border-radius:16px; overflow:hidden; background:#fff; box-shadow:var(--shadow-1)}
+  .row{display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--line)}
+  .row:first-child{border-top:0}
+  .cell{padding:18px; display:flex; align-items:center; gap:12px}
+  .icon{width:38px; height:38px; border-radius:10px; background:linear-gradient(135deg,var(--c1),var(--c2)); opacity:.35; border:1px solid var(--line)}
+  @media (max-width:900px){ .row{grid-template-columns:1fr 1fr} }
+  @media (max-width:520px){ .row{grid-template-columns:1fr} }
+
+  /* ========================= Insights ========================= */
+  .ideas{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+  .idea{background:#fff; border:1px solid var(--line); border-radius:16px; overflow:hidden; box-shadow:var(--shadow-1)}
+  .idea .ph{aspect-ratio:16/10; background:linear-gradient(90deg,var(--c1),var(--c2)); opacity:.22}
+  .idea .meta{padding:14px}
+  .tag{display:inline-block; padding:6px 10px; border-radius:999px; border:1px solid var(--line); color:var(--muted); font-weight:700; font-size:.85rem; background:rgba(217,234,253,.35)}
+  @media (max-width:1024px){ .ideas{grid-template-columns:1fr 1fr} }
+  @media (max-width:600px){ .ideas{grid-template-columns:1fr} }
+
+  /* ========================= Clients ========================= */
+  .clients{border:1px dashed var(--line); border-radius:16px; padding:18px; color:var(--muted); display:flex; gap:26px; overflow:auto}
+  .logo-pill{padding:8px 12px; border-radius:999px; border:1px solid var(--line); background:#fff; white-space:nowrap}
+
+  /* ========================= World ========================= */
+  .world{border:1px solid var(--line); border-radius:16px; padding:18px; background:linear-gradient(180deg,#fff,#f5f9ff); box-shadow:var(--shadow-1)}
+  .world svg{width:100%; height:auto; display:block}
+  .dot{fill:var(--c3); opacity:.7}
+
+  /* ========================= CTA ========================= */
+  .cta{border:1px solid var(--line); border-radius:18px; padding:24px; background:linear-gradient(90deg,var(--c1),var(--c2)); color:#0f172a; box-shadow:var(--shadow-2); display:flex; align-items:center; justify-content:space-between; gap:16px}
+  .cta p{margin:0}
+  @media (max-width:760px){ .cta{flex-direction:column; align-items:flex-start} }
+
+  /* ========================= Footer ========================= */
+  .footer{background:#0f172a; color:#d1d5db; padding:60px 0 30px}
+  .footer a{color:#e5e7eb}
+  .f-grid{display:grid; grid-template-columns:1.2fr 1fr 1fr .8fr; gap:20px}
+  .f-title{color:#fff; font-weight:800; margin-bottom:10px}
+  .copyright{border-top:1px solid #2b3240; text-align:center; padding-top:18px; margin-top:28px; color:#93a1b5; font-size:.95rem}
+  @media (max-width:960px){ .f-grid{grid-template-columns:1fr 1fr} }
+  @media (max-width:640px){ .f-grid{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
+
+  <!-- Fixed background video (persists while you scroll) -->
+  <div class="video-bg" aria-hidden="true">
+    <video autoplay muted loop playsinline poster="poster.jpg">
+      <!-- Replace with your files -->
+      <source src="https://res.cloudinary.com/dvpmvben2/video/upload/v1754466739/skdnfs_1_1_nlm7po.mp4" />
+      <source src="media/landing-background.mp4" type="video/mp4" />
+      <!-- Fallback if neither source loads -->
+    </video>
+    <div class="video-tint"></div>
+  </div>
+
+  <!-- Header -->
   <header class="site-header">
     <div class="container nav">
-      <a class="brand" href="index.html">
-        <img src="https://res.cloudinary.com/dvpmvben2/image/upload/v1756871062/Favicon_jbspde.png" alt="OBLIQ ASSOCIATES Logo">
-        OBLIQ ASSOCIATES
-      </a>
+      <a class="brand" href="#"><span class="logo" aria-hidden="true"></span> OBLIQ ASSOCIATES</a>
       <button class="menu-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
       <nav class="nav-links" aria-label="Primary">
-        <a class="active" href="index.html">Home</a>
+        <a href="#" class="active">Home</a>
         <a href="projects.html">Projects</a>
         <a href="about.html">About</a>
-        <a href="sustainability.html">Sustainability</a>
+        <a href="ideas.html">Insights</a>
         <a href="contact.html">Contact</a>
       </nav>
     </div>
   </header>
 
-  <!-- Sticky video -->
-  <section class="video-section">
-    <div class="video-sticky">
-      <video autoplay muted loop playsinline preload="metadata" id="bgVideo">
-        <source src="https://res.cloudinary.com/dvpmvben2/video/upload/v1756815861/WORK_SPACE-4-1-1_hfxaxw.mov" type="video/quicktime">
-        <!-- Optional: add another MP4 source if you have one -->
-      </video>
-    </div>
-    <div class="video-spacer"></div>
-  </section>
-
-  <!-- Content below the video -->
+  <!-- Hero -->
   <section class="hero">
-    <div class="container">
-      <h1>Architecture and interiors that bring out the best in people.</h1>
-      <p class="lead">We help organisations rethink the workplace—from strategy and design to engineering and delivery—so teams can do their best work.</p>
-      <div style="display:flex; gap:12px; flex-wrap:wrap;">
-        <a class="btn primary" href="contact.html">Start a project</a>
-        <a class="btn" href="projects.html">See our work</a>
-        <a class="btn" href="about.html">How we work</a>
+    <div class="container hero-grid">
+      <div>
+        <h1>Architecture and interiors that bring out the best in people.</h1>
+        <p class="lead">We help organisations rethink the workplace—from strategy and design to engineering and delivery—so teams can do their best work.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="contact.html">Start a project</a>
+          <a class="btn" href="projects.html">See our work</a>
+          <a class="btn" href="about.html">How we work</a>
+        </div>
+        <div class="statbox">
+          <div class="stat"><div class="n">120</div><div class="t">Office projects</div></div>
+          <div class="stat"><div class="n">2.5M</div><div class="t">sq.ft delivered</div></div>
+          <div class="stat"><div class="n">18</div><div class="t">Cities</div></div>
+        </div>
       </div>
-      <div class="grid3" style="margin-top:20px">
-        <div class="card"><b>Strategy</b><br>Briefs, test‑fits, change</div>
-        <div class="card"><b>Design</b><br>Architecture & interiors</div>
-        <div class="card"><b>Delivery</b><br>Engineering & QA/QC</div>
+      <aside class="hero-visual">
+        <div class="frame" aria-hidden="true"></div>
+        <div class="meta" style="padding:10px 4px 0; color:var(--muted)">Snapshot: agile workplaces • sustainability • engineering</div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Project highlights -->
+  <section class="section container">
+    <span class="eyebrow">Selected projects</span>
+    <h2>Workplace design from Bengaluru to Mumbai</h2>
+    <div class="grid3">
+      <article class="card">
+        <div class="thumb" aria-hidden="true"></div>
+        <div class="meta"><div class="title">Fintech HQ — Bengaluru</div><div class="sub">180,000 sq.ft · Office</div></div>
+      </article>
+      <article class="card">
+        <div class="thumb" aria-hidden="true"></div>
+        <div class="meta"><div class="title">Global SaaS Campus — Chennai</div><div class="sub">Campus planning · Office</div></div>
+      </article>
+      <article class="card">
+        <div class="thumb" aria-hidden="true"></div>
+        <div class="meta"><div class="title">Customer Floors — Mumbai</div><div class="sub">Interior · Hospitality layer</div></div>
+      </article>
+    </div>
+    <div style="margin-top:16px"><a class="btn" href="projects.html">Explore all projects</a></div>
+  </section>
+
+  <!-- This sentinel marks where the video should stop being visible -->
+  <div id="video-end"></div>
+
+  <!-- Services strip (like capability overview) -->
+  <section class="section container">
+    <span class="eyebrow">Capabilities</span>
+    <h2>Integrated strategy, design, engineering & delivery</h2>
+    <div class="strip">
+      <div class="row">
+        <div class="cell"><span class="icon"></span><div><strong>Workplace strategy</strong><br><span class="sub">Brief, test-fits, change</span></div></div>
+        <div class="cell"><span class="icon"></span><div><strong>Architecture</strong><br><span class="sub">Base build & core</span></div></div>
+        <div class="cell"><span class="icon"></span><div><strong>Interior design</strong><br><span class="sub">Materiality & brand</span></div></div>
+        <div class="cell"><span class="icon"></span><div><strong>Engineering</strong><br><span class="sub">MEP & systems</span></div></div>
+      </div>
+      <div class="row">
+        <div class="cell"><span class="icon"></span><div><strong>Technology</strong><br><span class="sub">Smart rooms & data</span></div></div>
+        <div class="cell"><span class="icon"></span><div><strong>Sustainability</strong><br><span class="sub">LEED / WELL ready</span></div></div>
+        <div class="cell"><span class="icon"></span><div><strong>Cost & PM</strong><br><span class="sub">Budget & delivery</span></div></div>
+        <div class="cell"><span class="icon"></span><div><strong>Design & build</strong><br><span class="sub">One-team approach</span></div></div>
       </div>
     </div>
   </section>
 
-  <footer style="background:#0f172a; color:#d1d5db; padding:40px 0 24px">
-    <div class="container" style="display:grid; gap:10px">
-      <div style="font-weight:800; color:#fff">OBLIQ ASSOCIATES</div>
-      <div>Bengaluru, Karnataka, India</div>
-      <div style="border-top:1px solid #2b3240; padding-top:12px; color:#93a1b5">© 2025 OBLIQ ASSOCIATES. All rights reserved.</div>
+  <!-- Insights -->
+  <section class="section container">
+    <span class="eyebrow">Insights</span>
+    <h2>The ideas shaping modern workplaces</h2>
+    <div class="ideas">
+      <article class="idea">
+        <div class="ph" aria-hidden="true"></div>
+        <div class="meta">
+          <span class="tag">Workplace strategy</span>
+          <h3 style="margin:.6rem 0 .3rem">Hybrid neighborhoods for focus & flow</h3>
+          <p class="sub">Rethinking allocation between collaboration and deep work.</p>
+        </div>
+      </article>
+      <article class="idea">
+        <div class="ph" aria-hidden="true"></div>
+        <div class="meta">
+          <span class="tag">Sustainability</span>
+          <h3 style="margin:.6rem 0 .3rem">Daylight, comfort and energy</h3>
+          <p class="sub">Using simulation to balance glare, lux levels and loads.</p>
+        </div>
+      </article>
+      <article class="idea">
+        <div class="ph" aria-hidden="true"></div>
+        <div class="meta">
+          <span class="tag">Technology</span>
+          <h3 style="margin:.6rem 0 .3rem">Smarter meeting experiences</h3>
+          <p class="sub">Sensors + analytics to right-size rooms and reduce friction.</p>
+        </div>
+      </article>
     </div>
+    <div style="margin-top:16px"><a class="btn" href="ideas.html">Read all insights</a></div>
+  </section>
+
+  <!-- Clients marquee -->
+  <section class="section container">
+    <span class="eyebrow">Trusted by</span>
+    <div class="clients" aria-label="Client logos">
+      <span class="logo-pill">FintechCo</span>
+      <span class="logo-pill">SaaS Global</span>
+      <span class="logo-pill">RetailCorp</span>
+      <span class="logo-pill">CloudWorks</span>
+      <span class="logo-pill">Energy+</span>
+      <span class="logo-pill">HealthTech</span>
+      <span class="logo-pill">LogiX</span>
+    </div>
+  </section>
+
+  <!-- Global presence (stylised world map) -->
+  <section class="section container">
+    <span class="eyebrow">Global presence</span>
+    <h2>Delivering across India and beyond</h2>
+    <div class="world">
+      <svg viewBox="0 0 960 380" aria-hidden="true" role="img">
+        <rect width="960" height="380" fill="#ffffff"/>
+        <circle class="dot" cx="520" cy="180" r="5"/>
+        <circle class="dot" cx="540" cy="220" r="5"/>
+        <circle class="dot" cx="560" cy="240" r="5"/>
+        <circle class="dot" cx="570" cy="210" r="5"/>
+        <circle class="dot" cx="600" cy="260" r="5"/>
+        <circle class="dot" cx="590" cy="230" r="5"/>
+        <text x="520" y="170" font-size="12" fill="#64748b">India</text>
+      </svg>
+      <div class="sub" style="margin-top:8px">Bengaluru · Mumbai · Chennai · Hyderabad · Pune · Gurugram</div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section container">
+    <div class="cta">
+      <p><strong>Ready to reimagine your workplace?</strong><br>Book a consultation to discuss plans, budget and timeline.</p>
+      <a class="btn" style="background:#fff" href="contact.html">Book a consultation</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container f-grid">
+      <div>
+        <div class="f-title">OBLIQ ASSOCIATES</div>
+        <p>Architecture for office, commercial infrastructure & interiors.</p>
+        <p>Bengaluru, Karnataka, India</p>
+      </div>
+      <div>
+        <div class="f-title">Company</div>
+        <p><a href="about.html">About</a></p>
+        <p><a href="projects.html">Projects</a></p>
+        <p><a href="ideas.html">Insights</a></p>
+        <p><a href="contact.html">Contact</a></p>
+      </div>
+      <div>
+        <div class="f-title">Connect</div>
+        <p><a href="mailto:info@obliqassociates.com">info@obliqassociates.com</a></p>
+        <p><a href="https://www.linkedin.com/company/obliqassociates" target="_blank" rel="noopener">LinkedIn</a></p>
+        <p><a href="https://www.instagram.com/obliqassociates" target="_blank" rel="noopener">Instagram</a></p>
+      </div>
+      <div>
+        <div class="f-title">Start</div>
+        <a class="btn primary" href="contact.html">Start a project</a>
+      </div>
+    </div>
+    <div class="container copyright">© 2025 OBLIQ ASSOCIATES. All rights reserved.</div>
   </footer>
 
 <script>
@@ -118,6 +372,29 @@
   const toggle = document.querySelector('.menu-toggle');
   const links  = document.querySelector('.nav-links');
   toggle?.addEventListener('click', ()=> links.classList.toggle('open'));
+
+  // Video cutoff: when #video-end enters view, fade video out
+  const cutoff = document.getElementById('video-end');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        document.body.classList.add('video-off');
+      }else{
+        document.body.classList.remove('video-off');
+      }
+    });
+  }, {threshold: 0.1});
+  if(cutoff) io.observe(cutoff);
+
+  // Pause video for reduced data modes if needed (optional)
+  const vid = document.querySelector('.video-bg video');
+  if(vid){
+    // If user has data saver on, don't autoplay (best-effort heuristic)
+    if(navigator.connection && navigator.connection.saveData){
+      vid.pause();
+    }
+  }
 </script>
 </body>
 </html>
+
