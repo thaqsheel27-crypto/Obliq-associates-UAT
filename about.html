@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>About Us | OBLIQ ASSOCIATES</title>
+<meta name="description" content="OBLIQ ASSOCIATES — architecture for office, commercial infrastructure, and interiors. Bengaluru, India."/>
+<style>
+  :root{
+    --bg: #0f172a; --paper: #f8fafc; --ink: #0b1324; --muted: #48556a; --line: #e6eaf1;
+    --brand: #2a9d8f; --brand-2: #e76f51; --brand-3: #e9c46a; --stone: #111827; --glass: rgba(255,255,255,.6);
+    --radius: 18px; --shadow-1: 0 10px 30px rgba(2,8,23,.10); --shadow-2: 0 14px 40px rgba(2,8,23,.14); --blur: 14px;
+    --h1: clamp(2rem, 1.2rem + 3vw, 3.6rem); --h2: clamp(1.6rem, 1rem + 2.2vw, 2.4rem);
+    --h3: clamp(1.25rem, .9rem + 1vw, 1.5rem); --lead: clamp(1.05rem, .9rem + .6vw, 1.25rem); --body: 1rem;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; font: 400 var(--body)/1.6 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial; color:var(--stone); background:var(--paper)}
+  img{max-width:100%; display:block}
+  a{color:inherit; text-decoration:none}
+  .container{width:min(1200px, 92%); margin-inline:auto}
+
+  .site-header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(var(--blur)); background:var(--glass); border-bottom:1px solid var(--line)}
+  .nav{display:flex; align-items:center; justify-content:space-between; gap:20px; padding:14px 0}
+  .brand{display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:.04em}
+  .brand .logo{width:36px; height:36px; border-radius:10px; background:
+    radial-gradient(60% 60% at 30% 30%, var(--brand-3), transparent 60%),
+    radial-gradient(70% 70% at 70% 70%, var(--brand-2), transparent 50%),
+    linear-gradient(135deg, var(--brand), #3bb3a5);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.4), var(--shadow-1);
+  }
+  .brand b{font-size:1.05rem}
+  .nav-links{display:flex; gap:26px; align-items:center}
+  .nav-links a{padding:8px 10px; border-radius:10px; color:var(--muted)}
+  .nav-links a.active, .nav-links a:hover{background:rgba(42,157,143,.12); color:var(--stone)}
+  .menu-toggle{display:none; border:0; background:transparent; padding:8px}
+  .menu-toggle span{display:block; width:24px; height:2px; background:var(--stone); margin:5px 0; border-radius:2px}
+
+  @media (max-width:840px){
+    .menu-toggle{display:block}
+    .nav-links{position:fixed; inset:64px 0 auto 0; background:var(--paper);
+      border-bottom:1px solid var(--line); padding:14px 16px; display:none; flex-direction:column}
+    .nav-links.open{display:flex}
+  }
+
+  .hero{position:relative; overflow:hidden; padding: clamp(60px, 8vw, 120px) 0;
+    background: radial-gradient(1200px 600px at 100% 0, rgba(231,111,81,.10), transparent 60%),
+               radial-gradient(900px 600px at 0 0, rgba(42,157,143,.12), transparent 55%),
+               linear-gradient(180deg, rgba(255,255,255,.0), rgba(0,0,0,0) 70%); }
+  .hero-grid{ display:grid; grid-template-columns: 1.1fr .9fr; gap: clamp(24px, 4vw, 64px); align-items:center; }
+  .hero h1{font-size:var(--h1); margin:0 0 10px; letter-spacing:.02em}
+  .hero p.lead{font-size:var(--lead); color:var(--muted); margin:0 0 26px}
+  .pill{ display:inline-flex; align-items:center; gap:10px; padding:8px 12px; border-radius:999px;
+    background:linear-gradient(90deg, rgba(42,157,143,.12), rgba(233,196,106,.12));
+    border:1px solid var(--line); color:var(--muted); font-weight:600; font-size:.9rem; }
+  .hero-card{ border-radius:var(--radius); background:white; box-shadow:var(--shadow-2); padding:22px; border:1px solid var(--line); }
+  .hero-stats{display:grid; grid-template-columns: repeat(3,1fr); gap:14px; margin-top:14px}
+  .stat{ padding:16px; border-radius:14px; background:linear-gradient(180deg, #fff, #f9fbff); border:1px solid var(--line); text-align:center; }
+  .stat .num{font:800 1.6rem/1.2 ui-sans-serif; color:var(--stone)}
+  .stat .label{font-size:.9rem; color:var(--muted)}
+  @media (max-width:960px){ .hero-grid{grid-template-columns:1fr} }
+
+  .section{padding: clamp(56px, 8vw, 96px) 0; position:relative}
+  .section .eyebrow{display:inline-block; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:700; font-size:.76rem; margin-bottom:8px}
+  .section h2{font-size:var(--h2); margin:.2em 0 .5em}
+  .tabs{display:flex; flex-wrap:wrap; gap:10px; margin: 18px 0 24px}
+  .tab-btn{border:1px solid var(--line); background:#fff; color:#111; padding:10px 12px; border-radius:12px; cursor:pointer; font-weight:600}
+  .tab-btn.active{background:linear-gradient(90deg, rgba(42,157,143,.15), rgba(233,196,106,.15)); border-color: rgba(42,157,143,.4)}
+  .tab-panels{border:1px solid var(--line); border-radius:16px; overflow:hidden; background:#fff; box-shadow: var(--shadow-1)}
+  .panel{display:none; padding:24px}
+  .panel.active{display:grid; grid-template-columns: 1fr .9fr; gap:26px}
+  .panel ul{margin:0; padding-left:18px}
+  .panel .chip{display:inline-block; margin-top:10px; background:rgba(231,111,81,.12); color:#7b2d1f; padding:6px 10px; border-radius:999px; font-weight:700; font-size:.85rem}
+  @media (max-width:960px){ .panel.active{grid-template-columns:1fr} }
+
+  .timeline{display:grid; gap:18px; margin-top:20px}
+  .step{display:grid; grid-template-columns: 60px 1fr; gap:16px; align-items:start}
+  .step .dot{width:12px; height:12px; border-radius:50%; background:var(--brand)}
+  .step .line{width:2px; background:linear-gradient(180deg, var(--brand), transparent); height:100%; margin:0 auto; border-radius:2px}
+  .step h3{margin:0 0 4px; font-size:var(--h3)}
+  .step p{margin:0; color:var(--muted)}
+
+  .metrics{display:grid; grid-template-columns: repeat(4,1fr); gap:14px; margin-top:20px}
+  .metric{padding:20px; border-radius:16px; background:linear-gradient(180deg,#fff,#f9fbff); border:1px solid var(--line); text-align:center}
+  .metric .n{font:800 2rem/1.1 ui-sans-serif}
+  .metric .t{color:var(--muted)}
+  @media (max-width:960px){ .metrics{grid-template-columns: repeat(2,1fr)} }
+
+  .carousel{position:relative; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:#fff}
+  .track{display:flex; transition:transform .48s cubic-bezier(.2,.7,.2,1)}
+  .slide{min-width:100%; padding:26px}
+  .quote{font-size:1.05rem}
+  .who{margin-top:10px; color:var(--muted)}
+  .car-nav{position:absolute; inset:auto 10px 10px auto; display:flex; gap:8px}
+  .car-btn{width:38px; height:38px; border-radius:10px; border:1px solid var(--line); background:#fff; cursor:pointer; font-weight:800}
+
+  .team-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  .member{ background:#fff; border:1px solid var(--line); border-radius:16px; padding:16px; text-align:center; box-shadow:var(--shadow-1); transition:transform .25s ease, box-shadow .25s ease; }
+  .member:hover{ transform:translateY(-3px); box-shadow:var(--shadow-2); }
+  .avatar{ aspect-ratio:1/1; width:100%; border-radius:12px; overflow:hidden; background:#eef3f7; }
+  .avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .member .name{ font-weight:800; margin:.8rem 0 .2rem; font-size:1.05rem; color:var(--stone); }
+  .member .role{ color:var(--muted); font-size:.95rem; }
+  @media (max-width:1024px){ .team-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:560px){ .team-grid{ grid-template-columns:1fr; } }
+
+  .faq{display:grid; gap:10px}
+  .qa{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#fff}
+  .q{display:flex; justify-content:space-between; align-items:center; padding:14px 16px; cursor:pointer; font-weight:700}
+  .a{padding:0 16px 14px; color:var(--muted); display:none}
+  .qa.open .a{display:block}
+
+  .footer{background:#111827; color:#d1d5db; padding:60px 0 30px}
+  .footer a{color:#e5e7eb}
+  .f-grid{display:grid; grid-template-columns: 1.2fr 1fr 1fr .8fr; gap:20px}
+  .f-title{color:#fff; font-weight:800; margin-bottom:10px}
+  .copyright{border-top:1px solid #2b3240; text-align:center; padding-top:18px; margin-top:28px; color:#93a1b5; font-size:.95rem}
+  @media (max-width:960px){ .f-grid{grid-template-columns:1fr 1fr} }
+  @media (max-width:640px){ .f-grid{grid-template-columns:1fr} }
+
+  .divider{height:1px; background:var(--line); margin:24px 0}
+  .reveal{opacity:0; transform: translateY(16px); transition: .7s ease}
+  .reveal.in{opacity:1; transform:none}
+  .btn{ display:inline-flex; align-items:center; gap:10px; padding:12px 18px; border-radius:12px; border:1px solid var(--line);
+    background:#fff; font-weight:700; cursor:pointer; box-shadow:var(--shadow-1) }
+  .btn.primary{background: linear-gradient(90deg, #2a9d8f, #38b2a3); color:#fff; border-color:transparent}
+  .chips{display:flex; flex-wrap:wrap; gap:8px}
+  .chip-ghost{padding:6px 10px; border:1px dashed var(--line); border-radius:999px; color:var(--muted); font-weight:700; font-size:.85rem}
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <span class="logo" aria-hidden="true"></span>
+        <b>OBLIQ ASSOCIATES</b>
+      </a>
+      <button class="menu-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="about.html" class="active" aria-current="page">About</a>
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="pill">Architecture • Office • Commercial • Interior</span>
+        <h1>We design enduring spaces for ambitious teams.</h1>
+        <p class="lead">An architecture firm from Bengaluru crafting high-performance offices, commercial infrastructure, and interiors that elevate culture, wellness, and outcomes.</p>
+        <div class="chips" style="margin:16px 0 26px">
+          <span class="chip-ghost">Workplace Strategy</span>
+          <span class="chip-ghost">Design &amp; Build</span>
+          <span class="chip-ghost">Sustainability</span>
+          <span class="chip-ghost">Engineering</span>
+        </div>
+        <a class="btn primary" href="contact.html">Start a Project</a>
+      </div>
+      <aside class="hero-card">
+        <strong>Snapshot</strong>
+        <div class="divider"></div>
+        <div class="hero-stats">
+          <div class="stat"><div class="num" data-count="120">0</div><div class="label">Office Projects</div></div>
+          <div class="stat"><div class="num" data-count="2.5">0</div><div class="label">Mn sq.ft delivered</div></div>
+          <div class="stat"><div class="num" data-count="18">0</div><div class="label">Cities</div></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section container reveal" id="services">
+    <span class="eyebrow">What we do</span>
+    <h2>Office, Commercial Infrastructure &amp; Interior</h2>
+    <div class="tabs" role="tablist" aria-label="Services">
+      <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-office" id="tab-office-btn">Office</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-commercial" id="tab-commercial-btn">Commercial Infra</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-interiors" id="tab-interiors-btn">Interior</button>
+    </div>
+
+    <div class="tab-panels">
+      <div class="panel active" id="tab-office" role="tabpanel" aria-labelledby="tab-office-btn">
+        <div>
+          <h3>Agile workplaces that scale with you</h3>
+          <p>From strategy to handover, we design flexible floors, collaborative neighborhoods, and tech-ready systems that support hybrid work and future growth.</p>
+          <ul>
+            <li>Test-fits, stacking &amp; adjacency planning</li>
+            <li>Wellness, daylight &amp; acoustic comfort</li>
+            <li>MEP coordination &amp; safety compliance</li>
+            <li>Smart meeting &amp; occupancy analytics</li>
+          </ul>
+          <span class="chip">LEED / WELL ready</span>
+        </div>
+        <div>
+          <svg viewBox="0 0 600 360" width="100%" height="100%" aria-hidden="true">
+            <defs>
+              <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#2a9d8f"/>
+                <stop offset="1" stop-color="#e9c46a"/>
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="600" height="360" fill="#f6fafb"/>
+            <rect x="40" y="40" width="520" height="280" rx="18" fill="url(#g1)" opacity=".18"/>
+            <rect x="70" y="80" width="200" height="80" rx="10" fill="#fff"/>
+            <rect x="290" y="80" width="220" height="160" rx="10" fill="#fff"/>
+            <rect x="70" y="180" width="200" height="60" rx="10" fill="#fff"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="panel" id="tab-commercial" role="tabpanel" aria-labelledby="tab-commercial-btn">
+        <div>
+          <h3>Commercial infrastructure with clarity &amp; control</h3>
+          <p>Robust shells, efficient cores and infrastructure upgrades that balance buildability with lifecycle performance.</p>
+          <ul>
+            <li>Base-build design &amp; core services planning</li>
+            <li>Structure, circulation &amp; egress optimization</li>
+            <li>Energy &amp; water efficiency strategies</li>
+            <li>Construction documentation &amp; site support</li>
+          </ul>
+          <span class="chip">Value engineering</span>
+        </div>
+        <div>
+          <svg viewBox="0 0 600 360" width="100%" height="100%" aria-hidden="true">
+            <rect width="600" height="360" fill="#f6fafb"/>
+            <g fill="#fff">
+              <rect x="60" y="60" width="110" height="220" rx="10"/>
+              <rect x="190" y="100" width="110" height="180" rx="10"/>
+              <rect x="320" y="80" width="110" height="200" rx="10"/>
+              <rect x="450" y="50" width="90" height="230" rx="10"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="panel" id="tab-interiors" role="tabpanel" aria-labelledby="tab-interiors-btn">
+        <div>
+          <h3>Interiors that express your brand</h3>
+          <p>Materiality, craft and intelligent detailing for reception, collaboration, cafés and focus spaces — balanced with durability and maintenance ease.</p>
+          <ul>
+            <li>Concept to FF&amp;E curation</li>
+            <li>Custom joinery &amp; lighting layers</li>
+            <li>Biophilic elements &amp; acoustic zoning</li>
+            <li>On-site coordination &amp; QA</li>
+          </ul>
+          <span class="chip">Prototype → Rollout</span>
+        </div>
+        <div>
+          <svg viewBox="0 0 600 360" width="100%" height="100%" aria-hidden="true">
+            <rect width="600" height="360" fill="#f6fafb"/>
+            <circle cx="150" cy="180" r="70" fill="#fff"/>
+            <rect x="260" y="120" width="260" height="140" rx="14" fill="#fff"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section container reveal" id="process">
+    <span class="eyebrow">How we work</span>
+    <h2>Clear, collaborative, accountable</h2>
+    <div class="timeline">
+      <div class="step"><div><div class="dot"></div><div class="line" style="height:70%"></div></div><div><h3>01 — Discovery</h3><p>Brief, stakeholders, metrics for success, due diligence of site &amp; code.</p></div></div>
+      <div class="step"><div><div class="dot"></div><div class="line" style="height:70%"></div></div><div><h3>02 — Concept &amp; Strategy</h3><p>Test-fits, narratives, material direction and cost plan alignment.</p></div></div>
+      <div class="step"><div><div class="dot"></div><div class="line" style="height:70%"></div></div><div><h3>03 — Technical Design</h3><p>Drawings, BIM, services coordination and authority submissions.</p></div></div>
+      <div class="step"><div><div class="dot"></div></div><div><h3>04 — Build &amp; Handover</h3><p>Quality control, commissioning, training and post-occupancy review.</p></div></div>
+    </div>
+  </section>
+
+  <section class="section container reveal" id="impact">
+    <span class="eyebrow">Impact</span>
+    <h2>Measured outcomes</h2>
+    <div class="metrics">
+      <div class="metric"><div class="n" data-count="98">0</div><div class="t">Client Satisfaction %</div></div>
+      <div class="metric"><div class="n" data-count="35">0</div><div class="t">Active Clients</div></div>
+      <div class="metric"><div class="n" data-count="500000">0</div><div class="t">sq.ft Under Design</div></div>
+      <div class="metric"><div class="n" data-count="15">0</div><div class="t">Years Experience</div></div>
+    </div>
+  </section>
+
+  <section class="section container reveal" id="testimonials">
+    <span class="eyebrow">What clients say</span>
+    <h2>Trusted by high-growth teams</h2>
+    <div class="carousel" aria-roledescription="carousel">
+      <div class="track">
+        <article class="slide"><p class="quote">“OBLIQ reconfigured our HQ to support hybrid work without sacrificing focus or culture. On time, on budget.”</p><p class="who">— Priya N., COO, Fintech</p></article>
+        <article class="slide"><p class="quote">“The team balanced aesthetics and engineering. Our new customer floors improved NPS within a quarter.”</p><p class="who">— Anirudh K., VP Real Estate, SaaS</p></article>
+        <article class="slide"><p class="quote">“Exceptional collaboration with our GC and vendors. The interior details uplift the brand every day.”</p><p class="who">— Meera S., Head of Workplace, Consumer</p></article>
+      </div>
+      <div class="car-nav"><button class="car-btn" aria-label="Previous">‹</button><button class="car-btn" aria-label="Next">›</button></div>
+    </div>
+  </section>
+
+  <section class="section container reveal" id="team">
+    <span class="eyebrow">Leadership</span>
+    <h2>People who shape our work</h2>
+    <div class="team-grid">
+      <article class="member"><div class="avatar"><img src="team-1.jpg" alt="Thaqsheel Vincent — Founder"></div><div class="name">Thaqsheel Vincent</div><div class="role">Founder</div></article>
+      <article class="member"><div class="avatar"><img src="https://res.cloudinary.com/dvpmvben2/image/upload/v1756206439/ChatGPT_Image_Aug_26_2025_04_35_35_PM_oii0lh.png" alt="Aaron Joe Felix — Principal Architect"></div><div class="name">Aaron Joe Felix</div><div class="role">Founder - Principal Architect</div></article>
+      <article class="member"><div class="avatar"><img src="" alt="Shanmugham Priya — Associate Architect"></div><div class="name">Associate Architect</div><div class="role">Associate Architect</div></article>
+      <article class="member"><div class="avatar"><img src="https://res.cloudinary.com/dvpmvben2/image/upload/v1756206440/ChatGPT_Image_Aug_26_2025_03_55_45_PM_c6abge.png" alt="Sriram - Project Manager Execution"></div><div class="name">Sriram</div><div class="role">Project Manager - Execution</div></article>
+    </div>
+  </section>
+
+  <section class="section container reveal" id="faq">
+    <span class="eyebrow">FAQ</span>
+    <h2>Answers to common questions</h2>
+    <div class="faq">
+      <div class="qa"><div class="q">What sectors do you focus on? <span>+</span></div><div class="a">We specialize in office, commercial infrastructure and interiors — strategy to delivery.</div></div>
+      <div class="qa"><div class="q">Do you handle permits and compliance? <span>+</span></div><div class="a">Yes. We coordinate authority approvals, safety, accessibility, fire &amp; services compliance.</div></div>
+      <div class="qa"><div class="q">Can you work with our preferred GC/vendor? <span>+</span></div><div class="a">Absolutely. We collaborate in open-book environments and value engineer to targets.</div></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container f-grid">
+      <div><div class="f-title">OBLIQ ASSOCIATES</div><p>Architecture for office, commercial infrastructure &amp; interiors.</p><p>Bengaluru, Karnataka, India</p></div>
+      <div><div class="f-title">Company</div><p><a href="about.html">About</a></p><p><a href="projects.html">Projects</a></p><p><a href="contact.html">Contact</a></p></div>
+      <div><div class="f-title">Connect</div><p><a href="mailto:info@obliqassociates.com">info@obliqassociates.com</a></p><p><a href="https://www.linkedin.com/company/obliqassociates" target="_blank" rel="noopener">LinkedIn</a></p><p><a href="https://www.instagram.com/obliqassociates" target="_blank" rel="noopener">Instagram</a></p></div>
+      <div><div class="f-title">Start</div><a class="btn primary" href="contact.html">Book a Consultation</a></div>
+    </div>
+    <div class="container copyright">© 2025 OBLIQ ASSOCIATES. All rights reserved.</div>
+  </footer>
+
+<script>
+  const toggle = document.querySelector('.menu-toggle');
+  const links = document.querySelector('.nav-links');
+  toggle?.addEventListener('click', ()=> links.classList.toggle('open'));
+
+  const tabButtons = [...document.querySelectorAll('.tab-btn')];
+  const panels = [...document.querySelectorAll('.panel')];
+  tabButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      tabButtons.forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      panels.forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      const panel = document.getElementById(btn.getAttribute('aria-controls'));
+      panel.classList.add('active');
+    });
+  });
+
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.18});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  const countEls = document.querySelectorAll('[data-count]');
+  const ioCount = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const el = e.target; const target = +el.dataset.count; const duration = 1400; const start = performance.now();
+      function tick(t){ const p = Math.min(1, (t-start)/duration); const val = target<50 ? (target*p).toFixed(target%1?1:0) : Math.floor(target*p); el.textContent = val; if(p<1) requestAnimationFrame(tick); }
+      requestAnimationFrame(tick);
+      ioCount.unobserve(el);
+    });
+  },{threshold:.4});
+  countEls.forEach(el=>ioCount.observe(el));
+
+  (function(){
+    const track = document.querySelector('.track'); if(!track) return;
+    const slides = document.querySelectorAll('.slide'); let i=0;
+    const prev = document.querySelectorAll('.car-btn')[0]; const next = document.querySelectorAll('.car-btn')[1];
+    const go = dir=>{ i = (i + dir + slides.length) % slides.length; track.style.transform = `translateX(-${i*100}%)`; };
+    prev.addEventListener('click', ()=>go(-1)); next.addEventListener('click', ()=>go(1));
+    let auto = setInterval(()=>go(1), 5000);
+    [prev,next,track].forEach(el=>el.addEventListener('mouseenter', ()=>clearInterval(auto)));
+    [prev,next,track].forEach(el=>el.addEventListener('mouseleave', ()=>auto = setInterval(()=>go(1), 5000)));
+  })();
+
+  document.querySelectorAll('.qa').forEach(box=>{
+    box.querySelector('.q').addEventListener('click', ()=>{ box.classList.toggle('open'); });
+  });
+</script>
+</body>
+</html>
