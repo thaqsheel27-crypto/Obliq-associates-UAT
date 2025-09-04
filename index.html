@@ -10,26 +10,27 @@
   :root{
     --c0:#F8FAFC; --c1:#D9EAFD; --c2:#BCCCDC; --c3:#9AA6B2;
     --paper:var(--c0); --ink:#1a202c; --muted:#64748b; --line:#e2e8f0;
-    --accent:var(--c1); --accent-2:var(--c2);
     --glass:rgba(255,255,255,.75);
     --shadow-1:0 10px 30px rgba(0,0,0,.06);
     --shadow-2:0 18px 55px rgba(0,0,0,.12);
     --radius:18px;
-    --h1:clamp(2.2rem,1.3rem + 3vw,3.6rem);
+    --h1:clamp(2.4rem,1.4rem + 3.4vw,4.4rem);
     --h2:clamp(1.6rem,1.1rem + 2vw,2.6rem);
-    --body:1rem;
+    --lead:clamp(1.05rem,.95rem + .6vw,1.25rem);
   }
   *{box-sizing:border-box}
-  body{margin:0; font:400 var(--body)/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial; color:var(--ink); background:var(--paper)}
-  a{color:inherit; text-decoration:none}
+  body{margin:0; font:400 1rem/1.6 ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,Arial; color:var(--ink); background:var(--paper)}
   .container{width:min(1200px,92%); margin-inline:auto}
+  a{color:inherit; text-decoration:none}
 
-  .site-header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(12px); background:var(--glass); border-bottom:1px solid var(--line)}
+  /* Header */
+  .site-header{position:sticky; top:0; z-index:60; backdrop-filter:saturate(140%) blur(12px); background:var(--glass); border-bottom:1px solid var(--line)}
   .nav{display:flex; align-items:center; justify-content:space-between; gap:20px; padding:14px 0}
   .brand{display:flex; align-items:center; gap:12px; font-weight:800}
+  .brand img{height:36px; width:auto; border-radius:8px}
   .nav-links{display:flex; gap:22px; align-items:center}
   .nav-links a{padding:8px 10px; border-radius:10px; color:#475569}
-  .nav-links a:hover,.nav-links a.active{background:rgba(217,234,253,.55); color:var(--ink)}
+  .nav-links a:hover,.nav-links a.active{background:rgba(217,234,253,.55)}
   .menu-toggle{display:none; border:0; background:transparent; padding:8px}
   .menu-toggle span{display:block; width:24px; height:2px; background:#111; margin:5px 0; border-radius:2px}
   @media (max-width:860px){
@@ -38,81 +39,85 @@
     .nav-links.open{display:flex}
   }
 
-  .section{padding:clamp(56px,8vw,96px) 0}
-  .footer{background:#0f172a; color:#d1d5db; padding:60px 0 30px; margin-top:40px}
-  .footer a{color:#e5e7eb}
-  .f-grid{display:grid; grid-template-columns:1.2fr 1fr 1fr .8fr; gap:20px}
-  .f-title{color:#fff; font-weight:800; margin-bottom:10px}
-  .copyright{border-top:1px solid #2b3240; text-align:center; padding-top:18px; margin-top:28px; color:#93a1b5; font-size:.95rem}
+  /* Sticky video section */
+  .video-section{position:relative}
+  .video-sticky{position:sticky; top:0; height:100vh; z-index:0; border-bottom:1px solid var(--line); background:#000}
+  .video-sticky video{width:100%; height:100%; object-fit:cover; display:block}
+  .video-spacer{height:20vh}
 
+  /* Content below */
+  .hero{padding:clamp(60px,8vw,120px) 0; background:
+    radial-gradient(1000px 500px at 100% 0, rgba(217,234,253,.42), transparent 60%),
+    radial-gradient(800px 520px at 0 0, rgba(188,204,220,.30), transparent 55%)}
+  h1{font-size:var(--h1); margin:0 0 10px}
+  .lead{color:var(--muted); font-size:var(--lead); margin:0 0 20px}
   .btn{display:inline-flex; align-items:center; gap:10px; padding:12px 18px; border-radius:12px; border:1px solid var(--line); background:#fff; font-weight:700; cursor:pointer; box-shadow:var(--shadow-1)}
-  .btn.primary{background:linear-gradient(90deg, var(--c3), var(--c2)); color:#0f172a; border-color:transparent}
+  .btn.primary{background:linear-gradient(90deg, #9AA6B2, #BCCCDC); color:#0f172a; border-color:transparent}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+  .card{background:#fff; border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow:var(--shadow-1)}
+  @media (max-width:900px){ .grid3{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
-    
-<header class="site-header">
+  <header class="site-header">
     <div class="container nav">
       <a class="brand" href="index.html">
-        <img src="https://res.cloudinary.com/dvpmvben2/image/upload/v1756871062/Favicon_jbspde.png" alt="OBLIQ ASSOCIATES Logo" class="logo" style="height:36px;width:auto;border-radius:8px">
+        <img src="https://res.cloudinary.com/dvpmvben2/image/upload/v1756871062/Favicon_jbspde.png" alt="OBLIQ ASSOCIATES Logo">
         OBLIQ ASSOCIATES
       </a>
       <button class="menu-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
       <nav class="nav-links" aria-label="Primary">
-        <a href="index.html" class="active" aria-current="page">Home</a>
-        <a href="about.html">About</a>
+        <a class="active" href="index.html">Home</a>
         <a href="projects.html">Projects</a>
+        <a href="about.html">About</a>
         <a href="sustainability.html">Sustainability</a>
         <a href="contact.html">Contact</a>
       </nav>
     </div>
   </header>
-<section class="hero" style="position:relative;min-height:70vh;display:flex;align-items:center;overflow:hidden">
-  <video id="bgVideo" autoplay muted loop playsinline preload="metadata"
-    style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;">
-    <source src="https://cdn.coverr.co/videos/coverr-office-building-5475/1080p.mp4" type="video/mp4">
-  </video>
-  <div class="container" style="padding:80px 0;">
-    <h1 style="font-size:clamp(2.4rem,1.4rem + 3.4vw,4.4rem);margin:0 0 12px;">Architecture and interiors that bring out the best in people.</h1>
-    <p style="color:#475569;font-size:clamp(1rem,.95rem + .6vw,1.25rem);margin:0 0 18px">We help organisations rethink the workplace—from strategy and design to engineering and delivery—so teams can do their best work.</p>
-    <div style="display:flex;gap:12px;flex-wrap:wrap">
-      <a class="btn primary" href="contact.html">Start a project</a>
-      <a class="btn" href="projects.html">See our work</a>
-      <a class="btn" href="sustainability.html">Sustainability</a>
+
+  <!-- Sticky video -->
+  <section class="video-section">
+    <div class="video-sticky">
+      <video autoplay muted loop playsinline preload="metadata" id="bgVideo">
+        <source src="https://res.cloudinary.com/dvpmvben2/video/upload/v1756815861/WORK_SPACE-4-1-1_hfxaxw.mov" type="video/quicktime">
+        <!-- Optional: add another MP4 source if you have one -->
+      </video>
     </div>
-  </div>
-</section>
-<footer class="footer">
-    <div class="container f-grid">
-      <div>
-        <div class="f-title">OBLIQ ASSOCIATES</div>
-        <p>Architecture for office, commercial infrastructure &amp; interiors.</p>
-        <p>Bengaluru, Karnataka, India</p>
-      </div>
-      <div>
-        <div class="f-title">Company</div>
-        <p><a href="about.html">About</a></p>
-        <p><a href="projects.html">Projects</a></p>
-        <p><a href="sustainability.html">Sustainability</a></p>
-        <p><a href="contact.html">Contact</a></p>
-      </div>
-      <div>
-        <div class="f-title">Connect</div>
-        <p><a href="mailto:info@obliqassociates.com">info@obliqassociates.com</a></p>
-        <p><a href="https://www.linkedin.com/company/obliq-associates/" target="_blank" rel="noopener">LinkedIn</a></p>
-        <p><a href="https://www.instagram.com/obliqassociates/" target="_blank" rel="noopener">Instagram</a></p>
-      </div>
-      <div>
-        <div class="f-title">Start</div>
+    <div class="video-spacer"></div>
+  </section>
+
+  <!-- Content below the video -->
+  <section class="hero">
+    <div class="container">
+      <h1>Architecture and interiors that bring out the best in people.</h1>
+      <p class="lead">We help organisations rethink the workplace—from strategy and design to engineering and delivery—so teams can do their best work.</p>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
         <a class="btn primary" href="contact.html">Start a project</a>
+        <a class="btn" href="projects.html">See our work</a>
+        <a class="btn" href="about.html">How we work</a>
+      </div>
+      <div class="grid3" style="margin-top:20px">
+        <div class="card"><b>Strategy</b><br>Briefs, test‑fits, change</div>
+        <div class="card"><b>Design</b><br>Architecture & interiors</div>
+        <div class="card"><b>Delivery</b><br>Engineering & QA/QC</div>
       </div>
     </div>
-    <div class="container copyright">© 2025 OBLIQ ASSOCIATES. All rights reserved.</div>
+  </section>
+
+  <footer style="background:#0f172a; color:#d1d5db; padding:40px 0 24px">
+    <div class="container" style="display:grid; gap:10px">
+      <div style="font-weight:800; color:#fff">OBLIQ ASSOCIATES</div>
+      <div>Bengaluru, Karnataka, India</div>
+      <div style="border-top:1px solid #2b3240; padding-top:12px; color:#93a1b5">© 2025 OBLIQ ASSOCIATES. All rights reserved.</div>
+    </div>
   </footer>
+
 <script>
-  const toggle=document.querySelector('.menu-toggle');
-  const links=document.querySelector('.nav-links');
-  toggle?.addEventListener('click',()=>links.classList.toggle('open'));
+  // Mobile nav
+  const toggle = document.querySelector('.menu-toggle');
+  const links  = document.querySelector('.nav-links');
+  toggle?.addEventListener('click', ()=> links.classList.toggle('open'));
 </script>
 </body>
 </html>
