@@ -35,9 +35,9 @@
     font:400 1rem/1.6 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
     color:var(--stone);
     background:var(--paper);
-    overflow-x:hidden;
+    overflow-x:hidden; /* kill accidental side-scroll */
   }
-  img, video, canvas { max-width:100%; height:auto; display:block; }
+  img, video, canvas { max-width:100%; height:auto; display:block; } /* safety */
   a{color:inherit; text-decoration:none}
   .container{width:min(1200px,92%); margin-inline:auto}
 
@@ -58,13 +58,12 @@
     .nav-links.open{display:flex}
   }
 
-  /* ================================
-     Spline section
-     Desktop  : sticky scrollytelling
-     Mobile   : FIXED-FULLSCREEN hero (no sticky)  ✅
-     ================================ */
+  /* ===== Spline section =====
+     Desktop: sticky scrollytelling.
+     Mobile: non-sticky, full-bleed 100dvh (fixes iOS half-width bug). */
   .spline-section{
     position: relative;
+    margin: 0;
     background: var(--navy);
     width: 100%;
   }
@@ -79,14 +78,12 @@
     overflow: hidden;
   }
   .spline-sticky > spline-viewer{
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+}
 
-  /* Make sure Spline's internal canvas can't pick a smaller width */
+  /* Hard-force the internal canvas in all builds */
   spline-viewer{ display:block; background: var(--navy)!important; }
   spline-viewer::part(canvas){
     background: var(--navy)!important;
@@ -98,31 +95,29 @@
 
   .spline-spacer{ height: var(--splineScroll); background: var(--navy); }
 
-  /* ===== Mobile: switch to fixed, full-viewport hero ===== */
+  /* ===== MOBILE OVERRIDE (the real fix) ===== */
   @media (max-width: 960px){
-    /* mark the section as mobile-fixed; JS also toggles this as a fallback */
-    .spline-section.mobile-fixed .spline-sticky{
-      position: static;             /* disable sticky */
-      height: 100dvh;               /* modern viewport unit */
+    /* switch OFF sticky: make it a simple, full-bleed block */
+    .spline-sticky{
+      position: relative;      /* no sticky on mobile */
+      top: auto;
+      height: 100dvh;          /* modern stable viewport height */
       height: -webkit-fill-available; /* iOS fallback */
-      min-height: 100vh;            /* fallback */
+      min-height: 100vh;       /* fallback */
       padding-left: env(safe-area-inset-left);
       padding-right: env(safe-area-inset-right);
-      overflow: visible;
     }
-    .spline-section.mobile-fixed .spline-sticky > spline-viewer{
-      position: fixed;              /* FIX: fixed to the viewport */
-      z-index: 0;
-      top: 0;
-      left: 0;
-      width: 100vw !important;      /* force viewport width */
-      height: 100dvh !important;
-      height: -webkit-fill-available !important;
+    .spline-sticky > spline-viewer{
+      position: absolute;
+      inset: 0;
+      width: 100% !important;      /* force full width of its box */
+      max-width: 100% !important;
+      height: 100% !important;
+      left: 0; right: 0; transform: none;
+      display: block;
     }
-    /* give space after the fixed hero so you can scroll to content below */
-    .spline-section.mobile-fixed .spline-spacer{
-      height: 100dvh;               /* equals the fixed block height */
-    }
+    /* Remove extra spacer scroll on mobile since we're not sticky */
+    .spline-spacer{ height: 12px; } /* tiny gap to separate sections */
   }
 
   /* ===== Hero ===== */
@@ -157,7 +152,7 @@
   .dot{width:12px; height:12px; border-radius:50%; background:var(--brand)}
   .line{width:2px; background:linear-gradient(180deg,var(--brand),transparent); height:100%; margin:0 auto; border-radius:2px}
 
-  /* ===== Roadmap with sticky image ===== */
+  /* ===== Roadmap with sticky image (desktop) ===== */
   .roadmap-grid{
     display:grid;
     grid-template-columns: 1.1fr .9fr;
@@ -180,8 +175,10 @@
     width:100%;
     height:100%;
     object-fit: cover;
-    object-position: center 12%; /* slight top bias */
+    object-position: center 12%; /* nudge towards top */
   }
+
+  /* Mobile: no sticky image (keeps things simple + robust) */
   @media (max-width: 960px){
     .roadmap-grid{ grid-template-columns: 1fr; }
     .roadmap-figure{ position: relative; top: auto; height: 360px; }
@@ -219,8 +216,8 @@
     </div>
   </header>
 
-  <!-- Spline -->
-  <section class="spline-section" id="spline">
+  <!-- Spline (mobile = non-sticky full-bleed; desktop = sticky) -->
+  <section class="spline-section">
     <div class="spline-sticky">
       <spline-viewer url="https://prod.spline.design/p8L54M3e7mM0K-jr/scene.splinecode"></spline-viewer>
     </div>
@@ -314,18 +311,11 @@
   const links = document.querySelector('.nav-links');
   toggle?.addEventListener('click', () => links.classList.toggle('open'));
 
-  // Force "mobile-fixed" class on phones so Spline fills the viewport
-  const section = document.querySelector('.spline-section');
-  const mq = window.matchMedia('(max-width: 960px)');
-  function applyMobileMode() {
-    if (mq.matches) section.classList.add('mobile-fixed');
-    else section.classList.remove('mobile-fixed');
-  }
-  applyMobileMode();
-  mq.addEventListener?.('change', applyMobileMode);
-  // Re-apply after orientation or address bar changes
-  window.addEventListener('orientationchange', () => setTimeout(applyMobileMode, 250));
-  window.addEventListener('resize', () => setTimeout(applyMobileMode, 250));
+  // (Optional) Reveal hook
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .18 });
+  document.querySelectorAll('.section').forEach(el => io.observe(el));
 </script>
 </body>
 </html>
