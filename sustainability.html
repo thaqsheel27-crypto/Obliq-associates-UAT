@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Sustainability | OBLIQ ASSOCIATES</title>
 <meta name="description" content="Sustainable architecture for offices, commercial infrastructure & interiors — energy, water, materials and wellbeing."/>
 <meta name="theme-color" content="#0f172a" />
@@ -23,16 +23,25 @@
     --h1:clamp(1.9rem,1.2rem+2.6vw,3rem); --h2:clamp(1.5rem,1rem+2vw,2.2rem); --lead:clamp(1rem,.9rem+.5vw,1.2rem);
     --navy:#0f172a;
 
-    /* How long the page should scroll while Spline stays pinned */
-    --splineScroll: 140vh; /* adjust: 100vh, 120vh, 200vh, etc. */
+    --splineScroll: 140vh;              /* desktop scroll length while sticky */
+    --stickTop: clamp(16px, 6vh, 72px); /* sticky offset for roadmap image */
   }
+
+  /* ===== Base ===== */
   *{box-sizing:border-box}
-  html, body { height: 100%; }
-  body{margin:0; font:400 1rem/1.6 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial; color:var(--stone); background:var(--paper)}
+  html, body { height: 100%; width: 100%; }
+  body{
+    margin:0;
+    font:400 1rem/1.6 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+    color:var(--stone);
+    background:var(--paper);
+    overflow-x:hidden;
+  }
+  img, video, canvas { max-width:100%; height:auto; display:block; }
   a{color:inherit; text-decoration:none}
   .container{width:min(1200px,92%); margin-inline:auto}
 
-  /* Header */
+  /* ===== Header ===== */
   .site-header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(var(--blur)); background:var(--glass); border-bottom:1px solid var(--line)}
   .nav{display:flex; align-items:center; justify-content:space-between; gap:20px; padding:12px 0}
   .brand{display:flex; align-items:center; gap:12px; font-weight:800}
@@ -49,45 +58,74 @@
     .nav-links.open{display:flex}
   }
 
-  /* ===== Spline pinned section — full viewport, pinned, no bottom white ===== */
+  /* ================================
+     Spline section
+     Desktop  : sticky scrollytelling
+     Mobile   : FIXED-FULLSCREEN hero (no sticky)  ✅
+     ================================ */
   .spline-section{
     position: relative;
-    margin: 0;
-    background: var(--navy); /* guarantees navy behind the canvas */
+    background: var(--navy);
+    width: 100%;
   }
+
+  /* Desktop sticky */
   .spline-sticky{
     position: sticky;
     top: 0;
-    height: 100svh;            /* mobile-safe viewport height */
-    min-height: 100vh;         /* fallback */
+    height: 100vh;
     background: var(--navy);
     z-index: 0;
-    border-bottom: none;
-    /* Optional: prevent drag/hover grabbing while scrolling (remove if you need interactions) */
+    overflow: hidden;
   }
-  @media (pointer: fine){
-    .spline-sticky { pointer-events: none; }
-  }
-
-  /* The scroll “length” before the next section appears */
-  .spline-spacer{
-    height: var(--splineScroll);
-    background: var(--navy);   /* keep navy under the sticky edge to avoid any seam */
-  }
-
-  /* Make sure the viewer itself renders on navy and fully fills */
-  spline-viewer{
+  .spline-sticky > spline-viewer{
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     display: block;
-    background: var(--navy) !important;
-  }
-  /* Some Spline builds expose a canvas part; enforce navy there too */
-  spline-viewer::part(canvas){
-    background: var(--navy) !important;
   }
 
-  /* Hero (compact) */
+  /* Make sure Spline's internal canvas can't pick a smaller width */
+  spline-viewer{ display:block; background: var(--navy)!important; }
+  spline-viewer::part(canvas){
+    background: var(--navy)!important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 100% !important;
+    max-width: none !important;
+  }
+
+  .spline-spacer{ height: var(--splineScroll); background: var(--navy); }
+
+  /* ===== Mobile: switch to fixed, full-viewport hero ===== */
+  @media (max-width: 960px){
+    /* mark the section as mobile-fixed; JS also toggles this as a fallback */
+    .spline-section.mobile-fixed .spline-sticky{
+      position: static;             /* disable sticky */
+      height: 100dvh;               /* modern viewport unit */
+      height: -webkit-fill-available; /* iOS fallback */
+      min-height: 100vh;            /* fallback */
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+      overflow: visible;
+    }
+    .spline-section.mobile-fixed .spline-sticky > spline-viewer{
+      position: fixed;              /* FIX: fixed to the viewport */
+      z-index: 0;
+      top: 0;
+      left: 0;
+      width: 100vw !important;      /* force viewport width */
+      height: 100dvh !important;
+      height: -webkit-fill-available !important;
+    }
+    /* give space after the fixed hero so you can scroll to content below */
+    .spline-section.mobile-fixed .spline-spacer{
+      height: 100dvh;               /* equals the fixed block height */
+    }
+  }
+
+  /* ===== Hero ===== */
   .hero{padding:clamp(36px,5vw,64px) 0; background:
     radial-gradient(900px 520px at 100% 0, rgba(231,111,81,.08), transparent 60%),
     radial-gradient(800px 520px at 0 0, rgba(42,157,143,.10), transparent 55%)}
@@ -98,10 +136,11 @@
   h1{font-size:var(--h1); margin:.1em 0 .2em} .lead{font-size:var(--lead); color:var(--muted); margin:0 0 18px}
   .hero-card{border-radius:var(--radius); background:#fff; box-shadow:var(--shadow-2); border:1px solid var(--line); padding:18px}
 
-  /* Sections — same padding as Home */
+  /* ===== Sections ===== */
   .section{padding:clamp(48px,7vw,88px) 0}
   .eyebrow{display:inline-block; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:700; font-size:.76rem; margin-bottom:8px}
   .section h2{font-size:var(--h2); margin:.2em 0 .5em}
+
   .cards{display:grid; grid-template-columns:repeat(4,1fr); gap:16px}
   .card{background:#fff; border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow:var(--shadow-1)}
   .card h3{margin:.2em 0 .4em} .card p{margin:0; color:var(--muted)}
@@ -115,14 +154,41 @@
 
   .timeline{display:grid; gap:16px; margin-top:12px}
   .step{display:grid; grid-template-columns:60px 1fr; gap:16px; align-items:start}
-  .dot{width:12px; height:12px; border-radius:50%; background:var(--brand)} .line{width:2px; background:linear-gradient(180deg,var(--brand),transparent); height:100%; margin:0 auto; border-radius:2px}
+  .dot{width:12px; height:12px; border-radius:50%; background:var(--brand)}
+  .line{width:2px; background:linear-gradient(180deg,var(--brand),transparent); height:100%; margin:0 auto; border-radius:2px}
 
-  .faq{display:grid; gap:10px}
-  .qa{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#fff}
-  .q{display:flex; justify-content:space-between; align-items:center; padding:12px 14px; cursor:pointer; font-weight:700}
-  .a{padding:0 14px 12px; color:var(--muted); display:none} .qa.open .a{display:block}
+  /* ===== Roadmap with sticky image ===== */
+  .roadmap-grid{
+    display:grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: clamp(18px, 3.5vw, 36px);
+    align-items: start;
+  }
+  .roadmap-figure{
+    position: sticky;
+    top: var(--stickTop);
+    align-self: start;
+    height: min(72vh, 560px);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-1);
+    border:1px solid var(--line);
+    background:#fff;
+  }
+  .roadmap-figure img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit: cover;
+    object-position: center 12%; /* slight top bias */
+  }
+  @media (max-width: 960px){
+    .roadmap-grid{ grid-template-columns: 1fr; }
+    .roadmap-figure{ position: relative; top: auto; height: 360px; }
+    .roadmap-figure img{ object-position: center 20%; }
+  }
 
-  /* Footer */
+  /* ===== Footer ===== */
   .btn{display:inline-flex; align-items:center; gap:10px; padding:12px 18px; border-radius:12px; border:1px solid var(--line); background:#fff; font-weight:700; cursor:pointer; box-shadow:var(--shadow-1)}
   .btn.primary{background:linear-gradient(90deg,#2a9d8f,#38b2a3); color:#fff; border-color:transparent}
   .footer{background:#111827; color:#d1d5db; padding:48px 0 28px}
@@ -153,15 +219,15 @@
     </div>
   </header>
 
-  <!-- ===== Spline (navy background + pinned + extra scroll) ===== -->
-  <section class="spline-section">
+  <!-- Spline -->
+  <section class="spline-section" id="spline">
     <div class="spline-sticky">
       <spline-viewer url="https://prod.spline.design/p8L54M3e7mM0K-jr/scene.splinecode"></spline-viewer>
     </div>
     <div class="spline-spacer"></div>
   </section>
 
-  <!-- Hero (compact) -->
+  <!-- Hero -->
   <section class="hero">
     <div class="container hero-grid">
       <div>
@@ -206,14 +272,28 @@
   </section>
 
   <!-- Roadmap -->
-  <section class="section container">
+  <section class="section container" id="roadmap">
     <span class="eyebrow">Roadmap</span>
     <h2>From audit to net-zero</h2>
-    <div class="timeline">
-      <div class="step"><div><div class="dot"></div><div class="line" style="height:70%"></div></div><div><h3>01 — Baseline</h3><p>Energy/water audit, IAQ testing, carbon model & quick wins.</p></div></div>
-      <div class="step"><div><div class="dot"></div><div class="line" style="height:70%"></div></div><div><h3>02 — Strategy</h3><p>Passive measures, system upgrades, materials policy & certification path.</p></div></div>
-      <div class="step"><div><div class="dot"></div><div class="line" style="height:70%"></div></div><div><h3>03 — Delivery</h3><p>Detailed design, procurement guidance, QAQC & commissioning.</p></div></div>
-      <div class="step"><div><div class="dot"></div></div><div><h3>04 — Verify & Improve</h3><p>POE, analytics dashboards, occupant feedback & continuous tuning.</p></div></div>
+    <div class="roadmap-grid">
+      <div>
+        <div class="timeline">
+          <div class="step"><div><div class="dot"></div><div class="line" style="height:70%"></div></div><div><h3>01 — Baseline</h3><p>Energy/water audit, IAQ testing, carbon model & quick wins.</p></div></div>
+          <div class="step"><div><div class="dot"></div><div class="line" style="height:70%"></div></div><div><h3>02 — Strategy</h3><p>Passive measures, system upgrades, materials policy & certification path.</p></div></div>
+          <div class="step"><div><div class="dot"></div><div class="line" style="height:70%"></div></div><div><h3>03 — Delivery</h3><p>Detailed design, procurement guidance, QAQC & commissioning.</p></div></div>
+          <div class="step"><div><div class="dot"></div></div><div><h3>04 — Verify & Improve</h3><p>POE, analytics dashboards, occupant feedback & continuous tuning.</p></div></div>
+        </div>
+      </div>
+      <figure class="roadmap-figure" aria-label="Roadmap illustration">
+        <img
+          src="https://res.cloudinary.com/dvpmvben2/image/upload/v1757340457/dilip-poddar-7_Ght34z7sE-unsplash_vvjxuq.webp"
+          alt="Calm green corridor with plants and daylight — sustainability roadmap visual"
+          loading="lazy"
+          width="1200"
+          height="800"
+          decoding="async"
+        />
+      </figure>
     </div>
   </section>
 
@@ -230,16 +310,22 @@
 
 <script>
   // Mobile nav
-  const toggle=document.querySelector('.menu-toggle');
-  const links=document.querySelector('.nav-links');
-  toggle?.addEventListener('click',()=>links.classList.toggle('open'));
+  const toggle = document.querySelector('.menu-toggle');
+  const links = document.querySelector('.nav-links');
+  toggle?.addEventListener('click', () => links.classList.toggle('open'));
 
-  // Reveal-on-scroll (lightweight)
-  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in'); io.unobserve(e.target);}})},{threshold:.18});
-  document.querySelectorAll('.section').forEach(el=>io.observe(el));
-
-  // FAQ
-  document.querySelectorAll('.qa .q').forEach(q=>q.addEventListener('click',()=>q.parentElement.classList.toggle('open')));
+  // Force "mobile-fixed" class on phones so Spline fills the viewport
+  const section = document.querySelector('.spline-section');
+  const mq = window.matchMedia('(max-width: 960px)');
+  function applyMobileMode() {
+    if (mq.matches) section.classList.add('mobile-fixed');
+    else section.classList.remove('mobile-fixed');
+  }
+  applyMobileMode();
+  mq.addEventListener?.('change', applyMobileMode);
+  // Re-apply after orientation or address bar changes
+  window.addEventListener('orientationchange', () => setTimeout(applyMobileMode, 250));
+  window.addEventListener('resize', () => setTimeout(applyMobileMode, 250));
 </script>
 </body>
 </html>
