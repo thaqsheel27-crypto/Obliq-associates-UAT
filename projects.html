@@ -128,17 +128,18 @@
     /* UTIL */
     .btn.primary{display:inline-flex; align-items:center; gap:10px; padding:12px 18px; border-radius:12px; border:1px solid var(--line); background:#fff; font-weight:700; box-shadow:var(--shadow-1)}
 </style>
+  <link rel="stylesheet" href="assets/updater.css">
 </head>
 <body>
     <!-- HEADER (fixed on top) -->
-    <header class="site-header">
+    <header class="site-header header--transparent">
         <div class="container nav">
             <a class="brand" href="index.html">
-                <img src="https://res.cloudinary.com/dvpmvben2/image/upload/v1756871062/Favicon_jbspde.png" alt="OBLIQ ASSOCIATES Logo">
+                <img src="https://res.cloudinary.com/dvpmvben2/image/upload/v1757580005/Screenshot_2025-09-11_at_2.08.02_PM_p2euse.png" alt="OBLIQ ASSOCIATES Logo">
                 OBLIQ ASSOCIATES
             </a>
             <button class="menu-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
-            <nav class="nav-links" aria-label="Primary">
+            <nav class="nav-links header--transparent" aria-label="Primary">
                 <a href="index.html">Home</a>
                 <a href="about.html">About</a>
                 <a href="projects.html" class="active" aria-current="page">Projects</a>
@@ -150,10 +151,10 @@
 
     <!-- LANDING: FULL-SCREEN VIDEO ONLY -->
     <section class="hero-video" aria-label="Landing video">
-        <video id="landingVideo" autoplay muted loop playsinline>
+        <div class="hero-video-container"><video id="landingVideo" autoplay muted loop playsinline>
             <source src="https://res.cloudinary.com/dvpmvben2/video/upload/v1756982290/clarity-stream_2_zp1xtf.mp4" />
             Your browser does not support the video tag.
-        </video>
+        </video></div>
     </section>
 
     <!-- SPACE PLANNING & WORKPLACE STRATEGY (pure black; immediately follows hero) -->
@@ -256,7 +257,7 @@
             </div>
             <div>
                 <div class="f-title">Start</div>
-                <a class="btn primary" href="contact.html">Start a Project</a>
+                <a class="btn-start-project btn primary" href="contact.html">Start a Project</a>
             </div>
         </div>
         <div class="container copyright">© 2025 OBLIQ ASSOCIATES. All rights reserved.</div>
